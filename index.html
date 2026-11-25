@@ -46,6 +46,12 @@ footer{background:#30282a;color:#f8e9ec;padding:34px 8vw;display:flex;justify-co
 .outfit-idea p{margin:6px 0;font-size:.9rem;line-height:1.5}.outfit-note{font-size:.78rem;opacity:.8;margin-top:12px}
 .whatsapp-link{display:inline-block;margin:8px 0 10px;text-decoration:none;background:#286b4b;color:#fff}
 @media(max-width:520px){.mini-catalog{grid-template-columns:1fr 1fr}}
+
+.ai-image-box{margin-top:22px;padding:18px;background:#fff;border:1px solid var(--line);border-radius:12px}
+.ai-image-box h3{font:normal 23px Georgia;margin:8px 0}
+.generated-image-wrap{margin-top:14px}
+.generated-image-wrap img{display:block;width:100%;max-height:620px;object-fit:contain;border-radius:10px;background:#f7eef0}
+.ai-image-box button:disabled{opacity:.6;cursor:wait}
 </style>
 </head>
 <body>
@@ -97,6 +103,19 @@ footer{background:#30282a;color:#f8e9ec;padding:34px 8vw;display:flex;justify-co
    <label for="vibe">¿Qué estilo te gustaría?</label>
    <select class="field" id="vibe"><option value="casual">Casual</option><option value="urbano">Urbano</option><option value="elegante">Elegante</option><option value="femenino">Femenino</option><option value="comodo">Cómodo</option></select>
    <button class="btn" onclick="generateOutfits()">Ver ideas de outfits</button><div class="output" id="postOutput" aria-live="polite"></div>
+   <div class="ai-image-box">
+    <span class="tag">03 · Generación visual con IA</span>
+    <h3>Visualiza tu outfit</h3>
+    <p>Genera una imagen de inspiración a partir de la prenda, la ocasión y el estilo que elegiste.</p>
+    <label for="imageDetails">¿Algún detalle adicional? (opcional)</label>
+    <input class="field" id="imageDetails" maxlength="180" placeholder="Ej. tonos neutros, accesorios dorados...">
+    <button class="btn" id="imageGenerateBtn" onclick="generateOutfitImage()">Generar imagen con IA</button>
+    <p class="outfit-note" id="imageStatus" role="status" aria-live="polite">La imagen es una propuesta visual generada por IA, no una fotografía exacta del producto.</p>
+    <div id="generatedImageWrap" class="generated-image-wrap" hidden>
+     <img id="generatedImage" alt="Inspiración de outfit generada con inteligencia artificial">
+     <a class="btn" id="downloadGeneratedImage" download="agua-y-rosa-outfit.webp">Guardar imagen</a>
+    </div>
+   </div>
   </div>
  </div>
 </section>
@@ -156,6 +175,37 @@ function generateOutfits(){
  const vibeText={casual:"casual",urbano:"urbano",elegante:"elegante",femenino:"femenino",comodo:"cómodo"}[vibe];
  const ideas=chosen.map((p,i)=>"<div class='outfit-idea'><strong>"+(i+1)+". "+p.name+"</strong><p>"+p.desc+"</p><p><b>Combínalo con:</b> "+p.tops[["casual","comodo"].includes(vibe)?0:vibe==="elegante"?2:1]+", "+p.shoes[vibe==="elegante"?1:vibe==="urbano"?0:2]+" y accesorios que complementen tu estilo.</p></div>").join("");
  const out=document.getElementById("postOutput");out.style.display="block";out.innerHTML="<h4>Ideas "+vibeText+" "+occasionText+"</h4>"+ideas+"<p class='outfit-note'>Estas son propuestas de combinación creadas a partir de las prendas del catálogo. Las blusas, zapatos y accesorios son sugerencias de styling, no referencias confirmadas del catálogo.</p>";
+}
+
+async function generateOutfitImage(){
+ const button=document.getElementById("imageGenerateBtn");
+ const status=document.getElementById("imageStatus");
+ const wrap=document.getElementById("generatedImageWrap");
+ const image=document.getElementById("generatedImage");
+ const download=document.getElementById("downloadGeneratedImage");
+ const garment=document.getElementById("garment").value;
+ const occasion=document.getElementById("occasion").value;
+ const vibe=document.getElementById("vibe").value;
+ const details=document.getElementById("imageDetails").value.trim();
+ button.disabled=true;button.textContent="Creando tu imagen...";
+ status.textContent="La IA está preparando tu inspiración. Esto puede tardar unos segundos.";
+ wrap.hidden=true;
+ try{
+  const response=await fetch("/api/generate-outfit",{
+   method:"POST",headers:{"Content-Type":"application/json"},
+   body:JSON.stringify({garment,occasion,vibe,details})
+  });
+  const data=await response.json().catch(()=>({}));
+  if(!response.ok)throw new Error(data.error||"No pudimos generar la imagen. Inténtalo nuevamente.");
+  image.src="data:image/webp;base64,"+data.image;
+  download.href=image.src;
+  wrap.hidden=false;
+  status.textContent="¡Tu inspiración está lista! Recuerda que es una imagen ilustrativa y puede no coincidir exactamente con la prenda real.";
+ }catch(error){
+  status.textContent=error.message||"Ocurrió un error al generar la imagen.";
+ }finally{
+  button.disabled=false;button.textContent="Generar imagen con IA";
+ }
 }
 </script>
 </body></html>
