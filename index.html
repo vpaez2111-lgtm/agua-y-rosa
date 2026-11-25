@@ -37,6 +37,15 @@ textarea.field{min-height:95px;resize:vertical}
 footer{background:#30282a;color:#f8e9ec;padding:34px 8vw;display:flex;justify-content:space-between;gap:20px;align-items:center;font-size:11px}footer strong{font:normal 20px Georgia;letter-spacing:2px}
 @media(max-width:800px){header{padding:0 5vw}nav{gap:12px}nav a{font-size:11px}.hero{grid-template-columns:1fr;padding:52px 7vw}.hero-art{min-height:260px}.hero-art img{height:280px}.cards{grid-template-columns:repeat(2,1fr)}.tool-grid{grid-template-columns:1fr}.steps{grid-template-columns:1fr}section{padding:50px 7vw}}
 @media(max-width:520px){nav a:nth-child(2),nav a:nth-child(3){display:none}.cards{grid-template-columns:1fr}.product img{height:330px}.section-head{display:block}.hero-art img{width:75%}}
+
+.mini-catalog{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:16px 0 20px}
+.mini-item{background:#f8f1f3;border:1px solid #ead8df;border-radius:12px;padding:11px;display:flex;flex-direction:column;gap:4px}
+.mini-item strong{font-size:.88rem;color:#54283d}.mini-item span{font-size:.75rem;color:#806b75}
+.panel label{display:block;font-size:.85rem;font-weight:600;margin:12px 0 6px;color:#573347}
+.outfit-idea{padding:13px 0;border-bottom:1px solid #eadde2}.outfit-idea:last-of-type{border-bottom:0}
+.outfit-idea p{margin:6px 0;font-size:.9rem;line-height:1.5}.outfit-note{font-size:.78rem;opacity:.8;margin-top:12px}
+.whatsapp-link{display:inline-block;margin:8px 0 10px;text-decoration:none;background:#286b4b;color:#fff}
+@media(max-width:520px){.mini-catalog{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
@@ -68,14 +77,26 @@ footer{background:#30282a;color:#f8e9ec;padding:34px 8vw;display:flex;justify-co
 <section class="tools" id="asistente">
  <div class="section-head"><div><div class="eyebrow">Experiencia interactiva</div><h2>Asistente de estilo</h2></div><p>Cuéntale qué buscas y recibe una recomendación basada en las prendas registradas en este prototipo.</p></div>
  <div class="tool-grid">
-  <div class="panel"><span class="tag">01 · Recomendador</span><h3>¿Qué estilo tienes en mente?</h3><p>Escribe una ocasión, preferencia o tipo de prenda. Por ejemplo: “quiero un look cómodo y urbano” o “busco un pantalón que estilice”.</p>
-   <div class="chatbox" id="chat"><div class="msg bot">¡Hola! Soy el asistente de Agua y Rosa. Cuéntame qué estilo buscas y te mostraré opciones del catálogo. ✨</div></div>
-   <div class="chatrow"><input class="field" id="question" placeholder="Escribe lo que estás buscando..." onkeydown="if(event.key==='Enter')askAI()"><button class="btn" onclick="askAI()">Enviar</button></div>
+  <div class="panel"><span class="tag">01 · Asesora de estilo</span><h3>¿En qué podemos ayudarte?</h3><p>Cuéntame qué ocasión tienes, qué estilo te gusta o qué prenda buscas. Estoy aquí para ayudarte a descubrir Agua y Rosa.</p>
+   <div class="chatbox" id="chat"><div class="msg bot">¡Hola! 💗 Soy la asistente de Agua y Rosa. Puedo ayudarte a elegir una prenda, armar un outfit, encontrar inspiración para una ocasión especial y conocer mejor nuestra colección. ¿Qué tienes en mente?</div></div>
+   <div class="chatrow"><input class="field" id="question" placeholder="Ej. Necesito un look para una cena..." onkeydown="if(event.key==='Enter')askAI()"><button class="btn" onclick="askAI()">Enviar</button></div>
   </div>
-  <div class="panel" id="contenido"><span class="tag">02 · Creador de contenido</span><h3>Ideas para Instagram</h3><p>Selecciona una prenda y el objetivo de la publicación para generar un texto inicial que el equipo pueda ajustar.</p>
-   <select class="field" id="garment"><option>Palazzo Cargo</option><option>Palazzo Licrado</option><option>Skinny</option><option>Mom Fit Rígido</option><option>Semicampana</option><option>Falda Prenses</option></select>
-   <select class="field" id="goal"><option value="lanzamiento">Presentar la prenda</option><option value="interaccion">Generar interacción</option><option value="estilo">Inspirar un look</option></select>
-   <button class="btn" onclick="generatePost()">Crear texto</button><div class="output" id="postOutput"></div>
+  <div class="panel" id="contenido"><span class="tag">02 · Inspírate y combina</span><h3>Ideas para tus outfits</h3><p>Explora todas las referencias del catálogo y descubre formas de combinarlas según tu estilo y la ocasión.</p>
+   <div class="mini-catalog" aria-label="Prendas del catálogo">
+    <div class="mini-item"><strong>Skinny</strong><span>Silueta ajustada</span></div>
+    <div class="mini-item"><strong>Palazzo Licrado</strong><span>Bota ancha y flexible</span></div>
+    <div class="mini-item"><strong>Palazzo Cargo</strong><span>Toque urbano y bolsillos</span></div>
+    <div class="mini-item"><strong>Mom Fit Rígido</strong><span>Clásico denim</span></div>
+    <div class="mini-item"><strong>Semicampana</strong><span>Volumen desde la rodilla</span></div>
+    <div class="mini-item"><strong>Falda Prenses</strong><span>Opción femenina</span></div>
+   </div>
+   <label for="garment">¿Qué prenda quieres combinar?</label>
+   <select class="field" id="garment"><option>Quiero ver ideas con todas</option><option>Skinny</option><option>Palazzo Licrado</option><option>Palazzo Cargo</option><option>Mom Fit Rígido</option><option>Semicampana</option><option>Falda Prenses</option></select>
+   <label for="occasion">¿Para qué ocasión?</label>
+   <select class="field" id="occasion"><option value="diario">Día a día</option><option value="universidad">Universidad o trabajo</option><option value="cita">Cita o salida especial</option><option value="noche">Plan de noche</option><option value="viaje">Viaje o paseo</option><option value="casual">Look casual y relajado</option></select>
+   <label for="vibe">¿Qué estilo te gustaría?</label>
+   <select class="field" id="vibe"><option value="casual">Casual</option><option value="urbano">Urbano</option><option value="elegante">Elegante</option><option value="femenino">Femenino</option><option value="comodo">Cómodo</option></select>
+   <button class="btn" onclick="generateOutfits()">Ver ideas de outfits</button><div class="output" id="postOutput" aria-live="polite"></div>
   </div>
  </div>
 </section>
@@ -92,15 +113,49 @@ footer{background:#30282a;color:#f8e9ec;padding:34px 8vw;display:flex;justify-co
 <footer><strong>AGUA Y ROSA</strong><span>AGUA Y ROSA AI · Prototipo académico · Catálogo 2026</span></footer>
 <script>
 const catalog = [
- {name:"Skinny",desc:"Silueta ajustada desde la cintura hasta los tobillos, con un entalle que estiliza y define la pierna.",keys:["ajustado","entallado","skinny","definir","pierna","clásico"]},
- {name:"Palazzo Licrado",desc:"Bota ancha y tiro alto, con elongación para adaptarse suavemente a las curvas y permitir libertad de movimiento.",keys:["cómodo","comodidad","movimiento","licrado","curvas","flexible","palazzo"]},
- {name:"Palazzo Cargo",desc:"Tiro alto, bota ancha y bolsillos laterales funcionales; aporta un toque urbano.",keys:["urbano","bolsillos","cargo","casual","relajado","ancho"]},
- {name:"Mom Fit Rígido",desc:"Referencia Mom Fit Rígido que aparece en el catálogo 2026.",keys:["mom","rígido","rigido","jean","denim"]},
- {name:"Semicampana",desc:"Moldea suavemente los muslos y se amplía progresivamente desde la rodilla; ayuda a alargar visualmente la figura.",keys:["estilizar","alargar","figura","campana","rodilla","proporciones"]},
- {name:"Falda Prenses",desc:"Referencia de falda identificada en el catálogo. El documento no incluye una descripción adicional en esa página.",keys:["falda","femenino","falda prenses"]}
+ {name:"Skinny",desc:"Silueta ajustada desde la cintura hasta los tobillos, con un entalle que estiliza y define la pierna.",keys:["ajustado","entallado","skinny","definir","pierna","clásico","formal"],tops:["blusa fluida","camisa oversize","body básico"],shoes:["tenis blancos","tacones","botines"]},
+ {name:"Palazzo Licrado",desc:"Bota ancha y tiro alto, con elongación para adaptarse suavemente a las curvas y permitir libertad de movimiento.",keys:["cómodo","comodidad","movimiento","licrado","curvas","flexible","palazzo"],tops:["top ajustado","camisa corta","blusa de tela ligera"],shoes:["sandalias","tenis minimalistas","tacones"]},
+ {name:"Palazzo Cargo",desc:"Tiro alto, bota ancha y bolsillos laterales funcionales; aporta un toque urbano.",keys:["urbano","bolsillos","cargo","casual","relajado","ancho"],tops:["camiseta básica","top ceñido","camisa corta"],shoes:["tenis chunky","botas","sandalias planas"]},
+ {name:"Mom Fit Rígido",desc:"Referencia Mom Fit Rígido incluida en el catálogo 2026.",keys:["mom","rígido","rigido","jean","denim"],tops:["camiseta estampada","camisa blanca","body"],shoes:["tenis clásicos","mocasines","botines"]},
+ {name:"Semicampana",desc:"Moldea suavemente los muslos y se amplía progresivamente desde la rodilla; ayuda a alargar visualmente la figura.",keys:["estilizar","alargar","figura","campana","rodilla","proporciones"],tops:["blusa ajustada","camisa elegante","top básico"],shoes:["tacones","plataformas","botines"]},
+ {name:"Falda Prenses",desc:"Referencia de falda identificada en el catálogo 2026. Consulta con la marca para conocer detalles adicionales.",keys:["falda","femenino","falda prenses"],tops:["blusa delicada","camiseta básica","camisa ajustada"],shoes:["bailarinas","sandalias","tacones"]}
 ];
-function addMessage(txt,who){const box=document.getElementById("chat");const d=document.createElement("div");d.className="msg "+who;d.textContent=txt;box.appendChild(d);box.scrollTop=box.scrollHeight}
-function askAI(){const input=document.getElementById("question");const q=input.value.trim();if(!q)return;addMessage(q,"user");input.value="";const low=q.toLowerCase();let matches=catalog.map(p=>({p,score:p.keys.reduce((s,k)=>s+(low.includes(k)?1:0),0)})).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,2);let answer;if(matches.length){answer="Por lo que me cuentas, podrías revisar: "+matches.map(x=>x.p.name+". "+x.p.desc).join(" Además, ");answer+=" ¿Quieres que te ayude a crear una idea de publicación para alguna de estas prendas?";}else{answer="Puedo orientarte con las referencias disponibles: Skinny, Palazzo Licrado, Palazzo Cargo, Mom Fit Rígido, Semicampana y Falda Prenses. Prueba describiendo si buscas algo ajustado, cómodo, urbano o que estilice la figura. No tengo información de precios, tallas o inventario.";}setTimeout(()=>addMessage(answer,"bot"),180)}
-function generatePost(){const g=document.getElementById("garment").value;const goal=document.getElementById("goal").value;let t="";if(goal==="lanzamiento")t="Hay prendas que se convierten en favoritas desde el primer look. ✨ Conoce "+g+", una opción para darle personalidad a tu estilo. Descubre más en Agua y Rosa Denim. #AguaYRosa #Denim";if(goal==="interaccion")t="Queremos saber de ti 💗 ¿Cómo combinarías "+g+"? Cuéntanos tu idea en los comentarios y comparte tu estilo con Agua y Rosa. #AguaYRosaDenim";if(goal==="estilo")t="Un look, muchas formas de expresar quién eres. "+g+" puede ser el punto de partida para crear un outfit con tu sello personal. ¿Lo llevarías con un estilo casual o más arreglado? #DenimStyle";const out=document.getElementById("postOutput");out.style.display="block";out.textContent=t}
+const WA_NUMBER = "57300222333";
+function addMessage(txt,who,showWhatsApp=false){
+ const box=document.getElementById("chat");const d=document.createElement("div");d.className="msg "+who;d.textContent=txt;box.appendChild(d);
+ if(showWhatsApp){const a=document.createElement("a");a.className="btn whatsapp-link";a.href="https://wa.me/"+WA_NUMBER;a.target="_blank";a.rel="noopener noreferrer";a.textContent="Continuar por WhatsApp";box.appendChild(a)}
+ box.scrollTop=box.scrollHeight;
+}
+function whatsappFallback(){return "¡Con gusto te ayudamos! Para darte una respuesta precisa sobre precios, tallas, disponibilidad, envíos o cualquier detalle que no tenga confirmado, escríbenos directamente por WhatsApp y nuestro equipo podrá orientarte. 💗"}
+function askAI(){
+ const input=document.getElementById("question");const q=input.value.trim();if(!q)return;addMessage(q,"user");input.value="";
+ const low=q.toLowerCase();let answer="";let useWA=false;
+ const matches=catalog.map(p=>({p,score:p.keys.reduce((n,k)=>n+(low.includes(k)?1:0),0)})).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,3);
+ if(/precio|cu[aá]nto cuesta|valor|talla|tallas|inventario|disponib|stock|env[ií]o|domicilio|pago|devoluci|cambio|direcci[oó]n|ubicaci[oó]n/.test(low)){answer=whatsappFallback();useWA=true}
+ else if(/hola|buenas|buenos d[ií]as|buenas tardes|buenas noches|qui[eé]n eres/.test(low)){answer="¡Holaaa! 💗 Bienvenida a Agua y Rosa Denim. Soy tu asesora virtual y estoy aquí para ayudarte a encontrar prendas, crear combinaciones y pensar looks para tus planes. ¿Qué ocasión tienes o qué estilo te gustaría llevar?"}
+ else if(/gracias|muchas gracias/.test(low)){answer="¡Con muchísimo gusto! 💗 En Agua y Rosa queremos que encuentres prendas con las que te sientas tú misma. ¿Te ayudo con alguna otra idea?"}
+ else if(/outfit|combinar|combino|look|vestir|ponerme|usar/.test(low)){
+   const p=matches.length?matches[0].p:null;
+   if(p){answer="¡Claro! Para un look con "+p.name+", te propongo combinarlo con "+p.tops[0]+", sumar "+p.shoes[0]+" y complementar con accesorios sencillos. "+p.desc+" Si me cuentas la ocasión y los colores que te gustan, te doy más opciones."}
+   else{answer="¡Vamos a armarlo! En el catálogo tenemos Skinny, Palazzo Licrado, Palazzo Cargo, Mom Fit Rígido, Semicampana y Falda Prenses. Para empezar, un top o blusa que equilibre la silueta, zapatos acordes al plan y accesorios que reflejen tu personalidad funcionan muy bien. ¿Para qué ocasión lo necesitas?"}
+ }
+ else if(/universidad|trabajo|oficina|clase/.test(low)){answer="Para la universidad o el trabajo, buscaría un look cómodo y pulido: Palazzo Licrado con camisa ligera y tenis limpios, o Mom Fit Rígido con una camiseta básica y mocasines. Si prefieres una silueta más definida, también puedes elegir Skinny con una blusa fluida."}
+ else if(/cita|cena|rom[aá]nt|elegante|evento|fiesta|noche/.test(low)){answer="¡Para un plan especial podemos elevar el denim! Semicampana con una blusa elegante y tacones, o Skinny con un top especial y botines. Si buscas algo más femenino, también podemos pensar un look alrededor de la Falda Prenses. ¿Quieres verte más elegante, atrevida o relajada?"}
+ else if(/viaje|paseo|playa|vacaciones/.test(low)){answer="Para viajar o pasear, priorizaría comodidad sin perder estilo: Palazzo Licrado con camiseta fresca y sandalias, o Palazzo Cargo con top básico y tenis. Lleva una capa ligera por si cambia el clima. ¿Tu plan es de día o de noche?"}
+ else if(/marca|agua y rosa|agua & rosa|denim/.test(low)){answer="Agua y Rosa es una marca enfocada en prendas denim y en ayudarte a expresar tu estilo. En el catálogo 2026 que tenemos disponible aparecen seis referencias: Skinny, Palazzo Licrado, Palazzo Cargo, Mom Fit Rígido, Semicampana y Falda Prenses. Puedo ayudarte a conocerlas y a crear looks con ellas."}
+ else if(matches.length){answer="¡Esa referencia puede encajar con lo que buscas! "+matches.map(x=>x.p.name+": "+x.p.desc).join(" Además, ")+" ¿Quieres que te sugiera cómo combinarla o para qué ocasión llevarla?"}
+ else{answer="¡Claro que sí! Puedo ayudarte con ideas de outfits, recomendaciones según tu ocasión, diferencias entre las prendas del catálogo y formas de combinar denim. También puedo orientarte para elegir entre Skinny, Palazzo Licrado, Palazzo Cargo, Mom Fit Rígido, Semicampana y Falda Prenses. Cuéntame un poquito más: ¿qué plan tienes o qué resultado buscas?"}
+ setTimeout(()=>addMessage(answer,"bot",useWA),180);
+}
+function generateOutfits(){
+ const selected=document.getElementById("garment").value;
+ const occasion=document.getElementById("occasion").value;
+ const vibe=document.getElementById("vibe").value;
+ const chosen=selected==="Quiero ver ideas con todas"?catalog:catalog.filter(p=>p.name===selected);
+ const occasionText={diario:"para el día a día",universidad:"para la universidad o el trabajo",cita:"para una cita o salida especial",noche:"para un plan de noche",viaje:"para un viaje o paseo",casual:"para un plan casual"}[occasion];
+ const vibeText={casual:"casual",urbano:"urbano",elegante:"elegante",femenino:"femenino",comodo:"cómodo"}[vibe];
+ const ideas=chosen.map((p,i)=>"<div class='outfit-idea'><strong>"+(i+1)+". "+p.name+"</strong><p>"+p.desc+"</p><p><b>Combínalo con:</b> "+p.tops[["casual","comodo"].includes(vibe)?0:vibe==="elegante"?2:1]+", "+p.shoes[vibe==="elegante"?1:vibe==="urbano"?0:2]+" y accesorios que complementen tu estilo.</p></div>").join("");
+ const out=document.getElementById("postOutput");out.style.display="block";out.innerHTML="<h4>Ideas "+vibeText+" "+occasionText+"</h4>"+ideas+"<p class='outfit-note'>Estas son propuestas de combinación creadas a partir de las prendas del catálogo. Las blusas, zapatos y accesorios son sugerencias de styling, no referencias confirmadas del catálogo.</p>";
+}
 </script>
 </body></html>
